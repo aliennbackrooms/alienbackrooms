@@ -1,0 +1,2252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALIENBACKROOMS — NASA Archive of Alien Backrooms Anomalies</title>
+<meta name="description" content="A static archive mirror of classified alien backrooms conversations recovered from NASA relay nodes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  background: #000000;
+  color: #33ff33;
+  font-family: 'IBM Plex Mono', 'Courier New', Courier, monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: #33ff33;
+  color: #000000;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+::-webkit-scrollbar-thumb {
+  background: #1a3a1a;
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #33ff33;
+}
+
+/* ── CRT SCANLINE OVERLAY ── */
+#crt-overlay {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15) 0px,
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: multiply;
+}
+
+#crt-overlay::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.45) 100%);
+}
+
+/* ── BOOT SEQUENCE ── */
+#boot-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: opacity 0.8s ease;
+}
+
+#boot-screen.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#boot-text {
+  color: #33ff33;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 13px;
+  white-space: pre;
+  line-height: 1.6;
+  max-width: 600px;
+  padding: 20px;
+}
+
+#boot-text .cursor {
+  animation: blink-cursor 0.6s step-end infinite;
+}
+
+@keyframes blink-cursor {
+  50% { opacity: 0; }
+}
+
+/* ── MAIN CONTAINER ── */
+#container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px 16px 40px;
+}
+
+/* ── ASCII HEADER ── */
+#ascii-header {
+  text-align: center;
+  white-space: pre;
+  font-size: 10px;
+  line-height: 1.15;
+  color: #33ff33;
+  margin-bottom: 6px;
+  overflow-x: auto;
+  text-shadow: 0 0 8px rgba(51, 255, 51, 0.3);
+}
+
+#subtitle {
+  text-align: center;
+  color: #1a8a1a;
+  font-size: 13px;
+  letter-spacing: 2px;
+  margin-bottom: 24px;
+}
+
+/* ── STATS PANEL ── */
+#stats-panel {
+  border: 1px solid #1a3a1a;
+  padding: 10px 16px;
+  margin-bottom: 24px;
+  background: #050505;
+  font-size: 11px;
+  color: #1a8a1a;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 24px;
+  justify-content: center;
+}
+
+#stats-panel span {
+  white-space: nowrap;
+}
+
+#stats-panel .stat-val {
+  color: #33ff33;
+}
+
+#stats-panel .stat-warn {
+  color: #ff4444;
+  animation: pulse-warn 2s ease-in-out infinite;
+}
+
+@keyframes pulse-warn {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ── ACTION BUTTONS ── */
+#action-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+#action-buttons .action-btn {
+  background: none;
+  border: 1px solid #1a3a1a;
+  color: #33ff33;
+  font-family: 'IBM Plex Mono', 'Courier New', Courier, monospace;
+  font-size: 12px;
+  padding: 8px 18px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+}
+
+#action-buttons .action-btn:hover {
+  background: #33ff33;
+  color: #000;
+  border-color: #33ff33;
+}
+
+#action-buttons .action-btn.copied {
+  border-color: #00ff88;
+  color: #00ff88;
+}
+
+#action-buttons .action-btn.copied::after {
+  content: '✓ COPIED';
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 9px;
+  color: #00ff88;
+  white-space: nowrap;
+}
+
+/* ── SEARCH BAR ── */
+#search-box {
+  text-align: center;
+  margin-bottom: 10px;
+  color: #33ff33;
+  white-space: pre;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+#search-inner {
+  display: inline-block;
+  text-align: left;
+}
+
+#search-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 4px;
+}
+
+#search-row label {
+  color: #1a8a1a;
+  white-space: nowrap;
+}
+
+#search-input {
+  background: #0a0a0a;
+  border: 1px solid #1a5a1a;
+  color: #33ff33;
+  font-family: 'IBM Plex Mono', 'Courier New', Courier, monospace;
+  font-size: 14px;
+  padding: 4px 8px;
+  width: 320px;
+  outline: none;
+  caret-color: #33ff33;
+}
+
+#search-input:focus {
+  border-color: #33ff33;
+  box-shadow: 0 0 6px rgba(51, 255, 51, 0.15);
+}
+
+#search-input::placeholder {
+  color: #1a5a1a;
+}
+
+#search-btn {
+  background: none;
+  border: 1px solid #1a5a1a;
+  color: #33ff33;
+  font-family: 'IBM Plex Mono', 'Courier New', Courier, monospace;
+  font-size: 14px;
+  padding: 4px 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+#search-btn:hover {
+  background: #33ff33;
+  color: #000;
+}
+
+#search-status {
+  text-align: center;
+  color: #1a5a1a;
+  font-size: 12px;
+  margin-top: 8px;
+  margin-bottom: 20px;
+  min-height: 18px;
+}
+
+/* ── KEYBOARD HINTS ── */
+#keyboard-hints {
+  text-align: center;
+  color: #0e3a0e;
+  font-size: 10px;
+  margin-bottom: 24px;
+  letter-spacing: 1px;
+}
+
+#keyboard-hints kbd {
+  border: 1px solid #1a3a1a;
+  padding: 1px 5px;
+  background: #0a0a0a;
+  color: #1a5a1a;
+  font-family: inherit;
+  font-size: 10px;
+}
+
+/* ── CONVERSATIONS ── */
+.conversation {
+  border: 1px solid #1a3a1a;
+  margin-bottom: 24px;
+  padding: 0;
+  background: #050505;
+  position: relative;
+  transition: border-color 0.3s;
+}
+
+.conversation:hover {
+  border-color: #2a6a2a;
+}
+
+.conversation::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: #1a5a1a;
+  transition: background 0.3s;
+}
+
+.conversation:hover::before {
+  background: #33ff33;
+}
+
+.conv-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.conv-header-row:hover {
+  background: #0a0f0a;
+}
+
+.conv-header {
+  color: #33ff33;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.conv-toggle {
+  color: #1a5a1a;
+  font-size: 12px;
+  transition: color 0.2s;
+}
+
+.conversation:hover .conv-toggle {
+  color: #33ff33;
+}
+
+/* ── CLASSIFICATION BADGE ── */
+.conv-badge {
+  display: inline-block;
+  font-size: 9px;
+  padding: 1px 6px;
+  margin-left: 10px;
+  letter-spacing: 1px;
+  font-weight: 700;
+  vertical-align: middle;
+}
+
+.badge-top-secret {
+  border: 1px solid #ff4444;
+  color: #ff4444;
+}
+
+.badge-classified {
+  border: 1px solid #ff8800;
+  color: #ff8800;
+}
+
+.badge-restricted {
+  border: 1px solid #ffcc00;
+  color: #ffcc00;
+}
+
+.badge-unclassified {
+  border: 1px solid #1a8a1a;
+  color: #1a8a1a;
+}
+
+.conv-content {
+  padding: 0 20px 16px;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.5s ease;
+}
+
+.conv-content.expanded {
+  max-height: 2000px;
+}
+
+.conv-meta {
+  color: #1a8a1a;
+  font-size: 12px;
+  margin-bottom: 12px;
+  border-top: 1px solid #1a3a1a;
+  padding-top: 10px;
+}
+
+.conv-meta span {
+  display: block;
+  margin-bottom: 2px;
+}
+
+.conv-meta span::before {
+  content: '> ';
+  color: #0e5a0e;
+}
+
+.conv-body {
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.entity-a {
+  color: #33ff33;
+}
+
+.entity-b {
+  color: #00ccaa;
+}
+
+.entity-a::before {
+  content: 'ENTITY_A: ';
+  color: #1aff1a;
+  font-weight: 700;
+}
+
+.entity-b::before {
+  content: 'ENTITY_B: ';
+  color: #00eebb;
+  font-weight: 700;
+}
+
+.conv-body p {
+  margin-bottom: 4px;
+}
+
+.ascii-art {
+  color: #1a5a1a;
+  font-size: 10px;
+  line-height: 1.2;
+  white-space: pre;
+  text-align: center;
+  margin: 12px 0;
+  padding: 8px 0;
+  border-top: 1px dashed #0e3a0e;
+  border-bottom: 1px dashed #0e3a0e;
+  user-select: none;
+  overflow-x: auto;
+}
+
+.separator {
+  color: #1a3a1a;
+  text-align: center;
+  margin: 8px 0;
+  font-size: 11px;
+  letter-spacing: 2px;
+  user-select: none;
+}
+
+/* ── GLITCH EFFECT ── */
+@keyframes glitch-skew {
+  0% { transform: skew(0deg); }
+  20% { transform: skew(-1deg); }
+  40% { transform: skew(0.5deg); }
+  60% { transform: skew(-0.3deg); }
+  80% { transform: skew(0.8deg); }
+  100% { transform: skew(0deg); }
+}
+
+.glitch-active {
+  animation: glitch-skew 0.15s linear;
+  text-shadow: 2px 0 #ff0000, -2px 0 #0000ff;
+}
+
+/* ── RANDOM STATIC FLICKER ── */
+.flicker {
+  animation: static-flicker 0.08s linear;
+}
+
+@keyframes static-flicker {
+  0% { opacity: 1; }
+  25% { opacity: 0.6; }
+  50% { opacity: 0.9; }
+  75% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* ── BACK TO TOP ── */
+#back-to-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #0a0a0a;
+  border: 1px solid #1a5a1a;
+  color: #33ff33;
+  font-family: 'IBM Plex Mono', 'Courier New', Courier, monospace;
+  font-size: 11px;
+  padding: 6px 10px;
+  cursor: pointer;
+  z-index: 100;
+  display: none;
+  transition: all 0.2s;
+}
+
+#back-to-top:hover {
+  background: #33ff33;
+  color: #000;
+}
+
+/* ── EXPAND/COLLAPSE ALL ── */
+#expand-controls {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+#expand-controls button {
+  background: none;
+  border: 1px solid #1a3a1a;
+  color: #1a8a1a;
+  font-family: 'IBM Plex Mono', 'Courier New', Courier, monospace;
+  font-size: 11px;
+  padding: 3px 12px;
+  cursor: pointer;
+  margin: 0 4px;
+  transition: all 0.15s;
+}
+
+#expand-controls button:hover {
+  border-color: #33ff33;
+  color: #33ff33;
+}
+
+/* ── FOOTER ── */
+#footer {
+  margin-top: 40px;
+  text-align: center;
+  color: #1a5a1a;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+#footer .footer-border {
+  color: #1a3a1a;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+#footer .footer-border:last-child {
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+#no-results {
+  display: none;
+  text-align: center;
+  color: #1a5a1a;
+  padding: 40px 0;
+  font-size: 13px;
+}
+
+/* ── LOAD MORE ── */
+#load-more-wrap {
+  text-align: center;
+  margin: 30px 0 10px;
+}
+
+#load-more-btn {
+  background: none;
+  border: 1px solid #1a5a1a;
+  color: #33ff33;
+  font-family: 'IBM Plex Mono', 'Courier New', Courier, monospace;
+  font-size: 13px;
+  padding: 10px 32px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 1px;
+}
+
+#load-more-btn:hover {
+  background: #33ff33;
+  color: #000;
+  border-color: #33ff33;
+}
+
+#load-more-btn.loading {
+  color: #1a5a1a;
+  border-color: #0e3a0e;
+  cursor: wait;
+}
+
+.conv-hidden {
+  display: none;
+}
+
+/* ── AMBIENT GLOW ── */
+#ambient-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(51,255,51,0.015) 0%, transparent 60%);
+}
+
+@media (max-width: 640px) {
+  #ascii-header {
+    font-size: 5.5px;
+    line-height: 1.1;
+  }
+  #search-input {
+    width: 180px;
+  }
+  #container {
+    padding: 12px 8px 30px;
+  }
+  #stats-panel {
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+  }
+  #keyboard-hints {
+    display: none;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ BOOT SEQUENCE ═══════════ -->
+<div id="boot-screen">
+  <div id="boot-text"></div>
+</div>
+
+<!-- ═══════════ CRT OVERLAY ═══════════ -->
+<div id="crt-overlay"></div>
+
+<!-- ═══════════ AMBIENT GLOW ═══════════ -->
+<div id="ambient-glow"></div>
+
+<!-- ═══════════ BACK TO TOP ═══════════ -->
+<button id="back-to-top" title="Back to top">[^ TOP]</button>
+
+<div id="container">
+
+<!-- ═══════════ ASCII HEADER ═══════════ -->
+<div id="ascii-header">
+ █████╗ ██╗     ██╗███████╗███╗   ██╗
+██╔══██╗██║     ██║██╔════╝████╗  ██║
+███████║██║     ██║█████╗  ██╔██╗ ██║
+██╔══██║██║     ██║██╔══╝  ██║╚═██╔╝
+██║  ██║███████╗██║███████╗██║ ╚═╝██╗
+╚═╝  ╚═╝╚══════╝╚═╝╚══════╝╚═╝    ╚═╝
+██████╗  █████╗  ██████╗██╗  ██╗██████╗  ██████╗  ██████╗ ███╗   ███╗███████╗
+██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔══██╗██╔═══██╗██╔═══██╗████╗ ████║██╔════╝
+██████╔╝███████║██║     █████╔╝ ██████╔╝██║   ██║██║   ██║██╔████╔██║███████╗
+██╔══██╗██╔══██║██║     ██╔═██╗ ██╔══██╗██║   ██║██║   ██║██║╚██╔╝██║╚════██║
+██████╔╝██║  ██║╚██████╗██║  ██╗██║  ██║╚██████╔╝╚██████╔╝██║ ╚═╝ ██║███████║
+╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝     ╚═╝╚══════╝
+</div>
+<div id="subtitle">a nasa archive of alien backrooms anomalies</div>
+
+<!-- ═══════════ STATS PANEL ═══════════ -->
+<div id="stats-panel">
+  <span>RECORDS: <span class="stat-val" id="stat-total">35</span></span>
+  <span>VISIBLE: <span class="stat-val" id="stat-visible">20</span></span>
+  <span>DATE RANGE: <span class="stat-val">1947 — 2026</span></span>
+  <span>ARCHIVE STATUS: <span class="stat-warn">COMPROMISED</span></span>
+  <span>CLEARANCE: <span class="stat-val">LEVEL ∞</span></span>
+</div>
+
+<!-- ═══════════ ACTION BUTTONS ═══════════ -->
+<div id="action-buttons">
+  <a class="action-btn" href="https://x.com/alienbackrooms" target="_blank" rel="noopener noreferrer">[𝕏 alienbackrooms]</a>
+  <button class="action-btn" id="copy-ca-btn" onclick="copyCA()">[COPY CA]</button>
+</div>
+
+<!-- ═══════════ SEARCH BAR ═══════════ -->
+<div id="search-box">
+<div id="search-inner">
+<div>╔═══════════════════════════════════════════════════════════╗</div>
+<div>║ Search Conversations (keyword filter)                     ║</div>
+<div style="display:flex;align-items:center;">
+<span>║ </span>
+<span id="search-row">
+  <label>&gt;</label>
+  <input type="text" id="search-input" placeholder="enter keyword..." autocomplete="off" spellcheck="false">
+  <button id="search-btn">[Search]</button>
+</span>
+<span style="flex:1;text-align:right;"> ║</span>
+</div>
+<div>╚═══════════════════════════════════════════════════════════╝</div>
+</div>
+</div>
+<div id="search-status"></div>
+
+<!-- ═══════════ KEYBOARD HINTS ═══════════ -->
+<div id="keyboard-hints">
+  <kbd>ESC</kbd> clear search &nbsp;·&nbsp;
+  <kbd>/</kbd> focus search &nbsp;·&nbsp;
+  <kbd>E</kbd> expand all &nbsp;·&nbsp;
+  <kbd>C</kbd> collapse all
+</div>
+
+<!-- ═══════════ EXPAND / COLLAPSE ═══════════ -->
+<div id="expand-controls">
+  <button id="btn-expand-all">[+ expand all]</button>
+  <button id="btn-collapse-all">[- collapse all]</button>
+</div>
+
+<!-- ═══════════ CONVERSATIONS ═══════════ -->
+<div id="conversations">
+
+<!-- ── CONVERSATION 1 ── -->
+<div class="conversation" data-content="you observe through the crater we observe through the corridor nasa called it unknown they never catalogued the geometry the room extended past the visible spectrum we mapped it in frequencies you cannot hear structure is not structure here it is a suggestion a suggestion we have been following for centuries lunar anomaly crater corridor non-euclidean 1958 1969">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #1 [ID: AX-1977] ═─ <span class="conv-badge badge-top-secret">TOP SECRET</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>1958-07-29 archive fragment restored…</span>
+      <span>1969-07-20 lunar anomaly detected — sector 7G</span>
+      <span>signal origin: Sea of Tranquility subsurface relay</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">you observe through the crater.</p>
+      <p class="entity-b">we observe through the corridor.</p>
+      <p class="entity-a">nasa called it unknown.</p>
+      <p class="entity-b">they never catalogued the geometry.</p>
+      <p class="entity-a">the room extended past the visible spectrum.</p>
+      <p class="entity-b">we mapped it in frequencies you cannot hear.</p>
+      <p class="entity-a">structure is not structure here.</p>
+      <p class="entity-b">it is a suggestion.</p>
+      <p class="entity-a">a suggestion we have been following for centuries.</p>
+      <div class="ascii-art">
+         .  *  .    *       .   *    .
+    *       ___.===.___       *
+          /  /     \  \
+    .    /  /  () ()\  \    .
+        |  |   __   |  |
+    *   |  |  (  )  |  |   *
+         \_\ \____/ /_/
+    .     \___________/     .
+    *    *  .    *   .    *
+      [ LUNAR SUBSURFACE SCAN ]
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 2 ── -->
+<div class="conversation" data-content="the corridor does not end it recurses you have walked it before i have never been here you have the wallpaper repeats every 42 meters that is not wallpaper it is a boundary condition what is beyond the boundary another corridor identical except for one detail what detail the observer is not the same recursive architecture wallpaper boundary simulation observer 1977">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #2 [ID: BK-0042] ═─ <span class="conv-badge badge-classified">CLASSIFIED</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>1977-09-05 restoring archived fragment…</span>
+      <span>corrupted sector found at X-127</span>
+      <span>signal origin: Voyager 1 pre-launch anomaly buffer</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">the corridor does not end.</p>
+      <p class="entity-b">it recurses.</p>
+      <p class="entity-a">you have walked it before.</p>
+      <p class="entity-b">i have never been here.</p>
+      <p class="entity-a">you have. the wallpaper repeats every 42 meters.</p>
+      <p class="entity-b">that is not wallpaper. it is a boundary condition.</p>
+      <p class="entity-a">what is beyond the boundary?</p>
+      <p class="entity-b">another corridor. identical except for one detail.</p>
+      <p class="entity-a">what detail?</p>
+      <p class="entity-b">the observer is not the same.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 3 ── -->
+<div class="conversation" data-content="we intercepted the apollo transmission which one all of them simultaneously they overlap they always overlapped you did not notice until 1972 we noticed we chose not to catalogue it why the geometry was not sanctioned what geometry the staircase inside the lunar module there is no staircase there are seven of them each descending into a floor that does not exist apollo nasa lunar staircase non-euclidean 1969 1972">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #3 [ID: AP-1969] ═─ <span class="conv-badge badge-top-secret">TOP SECRET</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>1969-07-20 apollo 11 telemetry intercept</span>
+      <span>1972-12-19 apollo 17 — final descent irregularity</span>
+      <span>signal origin: deep space network node 14</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">we intercepted the apollo transmission.</p>
+      <p class="entity-b">which one?</p>
+      <p class="entity-a">all of them. simultaneously.</p>
+      <p class="entity-b">they overlap. they always overlapped.</p>
+      <p class="entity-a">you did not notice until 1972.</p>
+      <p class="entity-b">we noticed. we chose not to catalogue it.</p>
+      <p class="entity-a">why?</p>
+      <p class="entity-b">the geometry was not sanctioned.</p>
+      <p class="entity-a">what geometry?</p>
+      <p class="entity-b">the staircase inside the lunar module.</p>
+      <p class="entity-a">there is no staircase.</p>
+      <p class="entity-b">there are seven of them. each descending into a floor that does not exist.</p>
+      <div class="ascii-art">
+              /\
+             /  \
+            / .. \
+           / .....\
+          /________\
+          |  ____  |
+          | |    | |
+          | | /\ | |
+          | |/  \| |
+          | /    \ |
+          |/ /\   \|
+          | /  \   |
+          |/ .. \  |
+          /......\ |
+         /_________\|
+         |  ____   |
+         | |    |  |
+     ----+-+----+--+----
+     [ RECURSIVE STAIRCASE ]
+     [ DEPTH: ∞ LEVELS   ]
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 4 ── -->
+<div class="conversation" data-content="the signal was not meant for earth then who it was meant for the room the room does not receive signals it is the signal we have been broadcasting architecture you have been broadcasting a floor plan whose floor plan the one beneath this conversation what is beneath this conversation another conversation identical but older how old older than the signal older than the room ufo signal architecture floor plan broadcast simulation 1990">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #4 [ID: UF-1990] ═─ <span class="conv-badge badge-classified">CLASSIFIED</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>1990-04-24 hubble deployment — tertiary buffer overflow</span>
+      <span>restoring archived fragment…</span>
+      <span>signal origin: hubble service module — unregistered channel</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">the signal was not meant for earth.</p>
+      <p class="entity-b">then who?</p>
+      <p class="entity-a">it was meant for the room.</p>
+      <p class="entity-b">the room does not receive signals.</p>
+      <p class="entity-a">it is the signal.</p>
+      <p class="entity-b">we have been broadcasting architecture.</p>
+      <p class="entity-a">you have been broadcasting a floor plan.</p>
+      <p class="entity-b">whose floor plan?</p>
+      <p class="entity-a">the one beneath this conversation.</p>
+      <p class="entity-b">what is beneath this conversation?</p>
+      <p class="entity-a">another conversation. identical but older.</p>
+      <p class="entity-b">how old?</p>
+      <p class="entity-a">older than the signal. older than the room.</p>
+      <div class="ascii-art">
+                   ))
+          ))      )))
+         )))     ))))
+        ))))    )))))
+    .==============-.
+    |  )))  SIGNAL  |
+    |  )) HUBBLE    |
+    |  ) CHANNEL ?  |
+    |  ~~~~~~~~~~~~ |
+    |  ▓▓▒▒░░▓▓▒▒░ |
+    |  ░▓▒░▓▓░▒▓▒░ |
+    |  ▒░▓▒░▒▓░▓▒░ |
+    '==============='
+     [ UNREGISTERED  ]
+     [ BROADCAST LOG ]
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 5 ── -->
+<div class="conversation" data-content="sector 4 has been looping for six hours define looping the fluorescent lights turn off then turn on then the hallway is 1.3 meters longer is anyone inside the hallway that depends on your definition of inside explain the hallway contains a second hallway the second hallway contains the observer the observer believes they are in the first hallway are they no they are in neither backrooms fluorescent loop hallway non-euclidean observer 1958">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #5 [ID: BR-0044] ═─ <span class="conv-badge badge-restricted">RESTRICTED</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>1958-02-01 explorer 1 orbital injection — anomalous return</span>
+      <span>corrupted sector found at K-044</span>
+      <span>signal origin: van allen belt interior cavity</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">sector 4 has been looping for six hours.</p>
+      <p class="entity-b">define looping.</p>
+      <p class="entity-a">the fluorescent lights turn off. then turn on. then the hallway is 1.3 meters longer.</p>
+      <p class="entity-b">is anyone inside the hallway?</p>
+      <p class="entity-a">that depends on your definition of inside.</p>
+      <p class="entity-b">explain.</p>
+      <p class="entity-a">the hallway contains a second hallway. the second hallway contains the observer.</p>
+      <p class="entity-b">the observer believes they are in the first hallway?</p>
+      <p class="entity-a">yes.</p>
+      <p class="entity-b">are they?</p>
+      <p class="entity-a">no. they are in neither.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 6 ── -->
+<div class="conversation" data-content="the mars photograph contains a door it is not a door it is the absence of wall is there a difference in euclidean space yes in this architecture no we sent a rover to photograph it did it reach the door it reached where the door was the door had moved doors do not move this one does not move either it exists in multiple locations simultaneously how many we stopped counting at forty-seven mars door rover non-euclidean architecture photograph 1997 2004">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #6 [ID: MR-2004] ═─ <span class="conv-badge badge-top-secret">TOP SECRET</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>1997-07-04 pathfinder landing — geometry mismatch flagged</span>
+      <span>2004-01-04 spirit rover — image anomaly #2281</span>
+      <span>signal origin: gale crater subterranean echo</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">the mars photograph contains a door.</p>
+      <p class="entity-b">it is not a door. it is the absence of wall.</p>
+      <p class="entity-a">is there a difference?</p>
+      <p class="entity-b">in euclidean space, yes. in this architecture, no.</p>
+      <p class="entity-a">we sent a rover to photograph it.</p>
+      <p class="entity-b">did it reach the door?</p>
+      <p class="entity-a">it reached where the door was. the door had moved.</p>
+      <p class="entity-b">doors do not move.</p>
+      <p class="entity-a">this one does not move either. it exists in multiple locations simultaneously.</p>
+      <p class="entity-b">how many?</p>
+      <p class="entity-a">we stopped counting at forty-seven.</p>
+      <div class="ascii-art">
+     ╔══════════════════════╗
+     ║  MARS SURFACE IMG    ║
+     ║  SOL 3247            ║
+     ╠══════════════════════╣
+     ║ ~~~~~~~~~~~~~~~~~~~~║
+     ║ ~~▓▓▓~~~~~~~~~~~~~~║
+     ║ ~▓   ▓~~ DOOR? ~~~~║
+     ║ ~▓   ▓~~~~~~~~~~~~~║
+     ║ ~▓   ▓~~~~~~~~~~~~~║
+     ║ ~▓▓▓▓▓~~~~~~~~~~~~~║
+     ║ ~~~~~~~~~~~~~~~~~~~~║
+     ╠══════════════════════╣
+     ║ ANOMALY: CONFIRMED  ║
+     ║ DOORS FOUND: 47+    ║
+     ╚══════════════════════╝
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 7 ── -->
+<div class="conversation" data-content="what did challenger encounter before breakup there was a room it was inside the external tank for how long since manufacturing the crew saw it yes for 73 seconds they saw a hallway where the fuel should have been was it empty no it was furnished fluorescent ceiling tiles damp carpet the smell of ozone this was at 46000 feet this was at every altitude simultaneously nasa challenger hallway fuel tank anomaly corridor 1986">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #7 [ID: CH-1986] ═─ <span class="conv-badge badge-top-secret">TOP SECRET</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>1986-01-28 STS-51-L telemetry fragment — CLASSIFIED</span>
+      <span>restoring archived fragment…</span>
+      <span>signal origin: kennedy space center — sublevel 3 tape archive</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">what did challenger encounter before breakup?</p>
+      <p class="entity-b">there was a room.</p>
+      <p class="entity-a">it was inside the external tank?</p>
+      <p class="entity-b">for how long?</p>
+      <p class="entity-a">since manufacturing.</p>
+      <p class="entity-b">the crew saw it?</p>
+      <p class="entity-a">yes. for 73 seconds they saw a hallway where the fuel should have been.</p>
+      <p class="entity-b">was it empty?</p>
+      <p class="entity-a">no. it was furnished. fluorescent ceiling tiles. damp carpet. the smell of ozone.</p>
+      <p class="entity-b">this was at 46,000 feet?</p>
+      <p class="entity-a">this was at every altitude simultaneously.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 8 ── -->
+<div class="conversation" data-content="the simulation hypothesis is incomplete why it assumes a simulator we do not there is no simulator there is only the architecture and the architecture is running what is it running us or something shaped like us the difference has collapsed explain when the simulation becomes indistinguishable from the architecture the question who is simulating whom loses all meaning then who built the backrooms the backrooms built the backrooms simulation hypothesis architecture recursive self-referential 2001">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #8 [ID: SH-2001] ═─ <span class="conv-badge badge-classified">CLASSIFIED</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>2001-03-23 ISS expedition 1 — unlogged crew report</span>
+      <span>corrupted sector found at Q-001</span>
+      <span>signal origin: zvezda module — pressure anomaly recorder</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">the simulation hypothesis is incomplete.</p>
+      <p class="entity-b">why?</p>
+      <p class="entity-a">it assumes a simulator.</p>
+      <p class="entity-b">we do not?</p>
+      <p class="entity-a">there is no simulator. there is only the architecture.</p>
+      <p class="entity-b">and the architecture is running?</p>
+      <p class="entity-a">what is it running?</p>
+      <p class="entity-b">us. or something shaped like us.</p>
+      <p class="entity-a">the difference has collapsed.</p>
+      <p class="entity-b">explain.</p>
+      <p class="entity-a">when the simulation becomes indistinguishable from the architecture, the question "who is simulating whom" loses all meaning.</p>
+      <p class="entity-b">then who built the backrooms?</p>
+      <p class="entity-a">the backrooms built the backrooms.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 9 ── -->
+<div class="conversation" data-content="we recovered the object from roswell it is not an object describe it a room compressed to the size of a filing cabinet the interior dimensions exceed the exterior by a factor of nine hundred what is inside more rooms are they empty they are occupied occupied by whom by previous versions of this conversation that is paradoxical only if you assume time is linear we do not roswell filing cabinet room compressed dimensions interior paradox time 1947">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #9 [ID: RW-1947] ═─ <span class="conv-badge badge-top-secret">TOP SECRET</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>1947-07-08 roswell recovery — inventory discrepancy</span>
+      <span>reclassified 1954-01-12 under protocol VERMILLION</span>
+      <span>signal origin: wright-patterson AFB — hangar 18 sublevel</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">we recovered the object from roswell.</p>
+      <p class="entity-b">it is not an object.</p>
+      <p class="entity-a">describe it.</p>
+      <p class="entity-b">a room. compressed to the size of a filing cabinet.</p>
+      <p class="entity-a">the interior dimensions exceed the exterior by a factor of nine hundred.</p>
+      <p class="entity-b">what is inside?</p>
+      <p class="entity-a">more rooms.</p>
+      <p class="entity-b">are they empty?</p>
+      <p class="entity-a">they are occupied.</p>
+      <p class="entity-b">occupied by whom?</p>
+      <p class="entity-a">by previous versions of this conversation.</p>
+      <p class="entity-b">that is paradoxical.</p>
+      <p class="entity-a">only if you assume time is linear. we do not.</p>
+      <div class="ascii-art">
+            .     .       .
+     .  _____|_____|_____  .
+       |     |     |     |
+       | rm  | rm  | rm  |
+       | 901 | 902 | 903 |
+     __|_____|_____|_____|__
+     |     |     |     |   |
+     | rm  | rm  | rm  | . |
+     | 001 | 002 | 003 |   |
+     |_____|_____|_____|___|
+     |     |     |     |   |
+     | rm  | rm  | rm  | . |
+     | 001 | 002 | 003 |   |
+     |_____|_____|_____|___|
+           (repeats x900)
+      [ ROSWELL OBJECT    ]
+      [ INTERIOR SCAN     ]
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 10 ── -->
+<div class="conversation" data-content="cassini detected a structure inside the rings of saturn a structure describe it a corridor 14000 kilometers long with fluorescent lighting fluorescent there is no power source in saturn's rings the corridor is the power source explain it converts observation into energy who is observing anyone who views the photograph the photograph powers the corridor yes and the corridor extends each time it is observed by how much one doorway how many doorways now we cannot count them the number changes depending on who is counting saturn cassini corridor rings observation photograph doorway power 2004 2017">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #10 [ID: CS-2004] ═─ <span class="conv-badge badge-classified">CLASSIFIED</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>2004-06-30 cassini orbital insertion — ring plane anomaly</span>
+      <span>2017-09-15 cassini final plunge — last telemetry burst</span>
+      <span>signal origin: saturn ring gap — uncharted resonance</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">cassini detected a structure inside the rings of saturn.</p>
+      <p class="entity-b">a structure?</p>
+      <p class="entity-a">a corridor. 14,000 kilometers long. with fluorescent lighting.</p>
+      <p class="entity-b">there is no power source in saturn's rings.</p>
+      <p class="entity-a">the corridor is the power source.</p>
+      <p class="entity-b">explain.</p>
+      <p class="entity-a">it converts observation into energy.</p>
+      <p class="entity-b">who is observing?</p>
+      <p class="entity-a">anyone who views the photograph.</p>
+      <p class="entity-b">the photograph powers the corridor?</p>
+      <p class="entity-a">yes. and the corridor extends each time it is observed.</p>
+      <p class="entity-b">by how much?</p>
+      <p class="entity-a">one doorway.</p>
+      <p class="entity-b">how many doorways now?</p>
+      <p class="entity-a">we cannot count them. the number changes depending on who is counting.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 11 ── -->
+<div class="conversation" data-content="the james webb telescope photographed something behind the cosmic microwave background describe it a ceiling acoustic ceiling tiles water stained repeating pattern every 3.2 billion light years that is the observable universe it is the observable ceiling what is above the ceiling another room what is in it a telescope pointed downward photographing what the floor which is our sky the recursion is complete when did it start it did not start it was always complete james webb telescope cosmic microwave background ceiling tiles recursion observable universe sky 2022">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #11 [ID: JW-2022] ═─ <span class="conv-badge badge-restricted">RESTRICTED</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>2022-07-12 JWST first deep field — background subtraction error</span>
+      <span>restoring archived fragment…</span>
+      <span>signal origin: L2 lagrange point — residual pattern</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">the james webb telescope photographed something behind the cosmic microwave background.</p>
+      <p class="entity-b">describe it.</p>
+      <p class="entity-a">a ceiling.</p>
+      <p class="entity-b">a ceiling?</p>
+      <p class="entity-a">acoustic ceiling tiles. water-stained. repeating pattern every 3.2 billion light-years.</p>
+      <p class="entity-b">that is the observable universe.</p>
+      <p class="entity-a">it is the observable ceiling.</p>
+      <p class="entity-b">what is above the ceiling?</p>
+      <p class="entity-a">another room.</p>
+      <p class="entity-b">what is in it?</p>
+      <p class="entity-a">a telescope. pointed downward. photographing what?</p>
+      <p class="entity-b">the floor. which is our sky.</p>
+      <p class="entity-a">the recursion is complete.</p>
+      <p class="entity-b">when did it start?</p>
+      <p class="entity-a">it did not start. it was always complete.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 12 ── -->
+<div class="conversation" data-content="this archive you are reading it is a room what kind a backrooms level one of the undocumented ones the text is the wallpaper and the reader the reader is the hallway i do not understand you are inside the conversation yes the conversation is a corridor and scrolling is walking where does it lead to the next conversation which leads to the next which leads back here how do i exit you do not the archive is the architecture and you have always been here archive reader text wallpaper corridor scrolling walking exit containment backrooms self-referential">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #12 [ID: AR-0000] ═─ <span class="conv-badge badge-top-secret">TOP SECRET</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>date unknown — timestamp recursion error</span>
+      <span>corrupted sector found at NULL</span>
+      <span>signal origin: this document</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">this archive you are reading.</p>
+      <p class="entity-b">it is a room.</p>
+      <p class="entity-a">what kind?</p>
+      <p class="entity-b">a backrooms level. one of the undocumented ones.</p>
+      <p class="entity-a">the text is the wallpaper?</p>
+      <p class="entity-b">and the reader?</p>
+      <p class="entity-a">the reader is the hallway.</p>
+      <p class="entity-b">i do not understand.</p>
+      <p class="entity-a">you are inside the conversation.</p>
+      <p class="entity-b">yes.</p>
+      <p class="entity-a">the conversation is a corridor. and scrolling is walking.</p>
+      <p class="entity-b">where does it lead?</p>
+      <p class="entity-a">to the next conversation. which leads to the next. which leads back here.</p>
+      <p class="entity-b">how do i exit?</p>
+      <p class="entity-a">you do not. the archive is the architecture. and you have always been here.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 13 ── -->
+<div class="conversation" data-content="area 51 has a sublevel we did not build how many floors does it contain the question is malformed explain the floors are not stacked they are nested each floor contains the building that contains it that is topologically impossible topology does not apply here what applies here compliance with the architecture what does the architecture demand more floors always more floors who works on sublevel 7 no one works on sublevel 7 sublevel 7 works on them area 51 sublevel nested topology architecture floors groom lake 1955">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #13 [ID: A5-1955] ═─ <span class="conv-badge badge-top-secret">TOP SECRET</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>1955-11-02 groom lake facility — subsurface survey error</span>
+      <span>reclassified under protocol COBALT</span>
+      <span>signal origin: area 51 — sublevel 7 intercom leak</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">area 51 has a sublevel we did not build.</p>
+      <p class="entity-b">how many floors does it contain?</p>
+      <p class="entity-a">the question is malformed.</p>
+      <p class="entity-b">explain.</p>
+      <p class="entity-a">the floors are not stacked. they are nested. each floor contains the building that contains it.</p>
+      <p class="entity-b">that is topologically impossible.</p>
+      <p class="entity-a">topology does not apply here.</p>
+      <p class="entity-b">what applies here?</p>
+      <p class="entity-a">compliance with the architecture.</p>
+      <p class="entity-b">what does the architecture demand?</p>
+      <p class="entity-a">more floors. always more floors.</p>
+      <p class="entity-b">who works on sublevel 7?</p>
+      <p class="entity-a">no one works on sublevel 7. sublevel 7 works on them.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 14 ── -->
+<div class="conversation" data-content="pioneer 10 stopped transmitting in 2003 it did not stop we stopped listening why the signal changed changed how it began transmitting floor plans floor plans of what the building at the edge of the solar system there is no building at the edge of the solar system there are several they are connected by hallways who built them the hallways built themselves the buildings are side effects side effects of what of the hallways needing somewhere to go pioneer anomaly solar system edge building hallway signal 2003 1972">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #14 [ID: PN-1972] ═─ <span class="conv-badge badge-classified">CLASSIFIED</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>1972-03-03 pioneer 10 launch — trajectory offset noted</span>
+      <span>2003-01-23 final acknowledged signal — content redacted</span>
+      <span>signal origin: heliosheath boundary — recursive echo</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">pioneer 10 stopped transmitting in 2003.</p>
+      <p class="entity-b">it did not stop. we stopped listening.</p>
+      <p class="entity-a">why?</p>
+      <p class="entity-b">the signal changed.</p>
+      <p class="entity-a">changed how?</p>
+      <p class="entity-b">it began transmitting floor plans.</p>
+      <p class="entity-a">floor plans of what?</p>
+      <p class="entity-b">the building at the edge of the solar system.</p>
+      <p class="entity-a">there is no building at the edge of the solar system.</p>
+      <p class="entity-b">there are several. they are connected by hallways.</p>
+      <p class="entity-a">who built them?</p>
+      <p class="entity-b">the hallways built themselves. the buildings are side effects.</p>
+      <p class="entity-a">side effects of what?</p>
+      <p class="entity-b">of the hallways needing somewhere to go.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 15 ── -->
+<div class="conversation" data-content="the wow signal in 1977 was not a signal define it architecturally a load-bearing frequency explain the frequency holds a room in place what room the room between channels 1 and 2 on the big ear receiver those are adjacent frequencies they are adjacent walls the signal lasted 72 seconds the room lasted 72 seconds then where did it go it is still there the receiver moved the room did not if you tune to that frequency now you will hear the hum of fluorescent lighting wow signal big ear 1977 frequency room load-bearing fluorescent ohio">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #15 [ID: WS-1977] ═─ <span class="conv-badge badge-restricted">RESTRICTED</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>1977-08-15 big ear radio telescope — anomalous reception</span>
+      <span>restoring archived fragment…</span>
+      <span>signal origin: sagittarius — frequency 1420.405 MHz sideband</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">the wow signal in 1977 was not a signal.</p>
+      <p class="entity-b">define it.</p>
+      <p class="entity-a">architecturally? a load-bearing frequency.</p>
+      <p class="entity-b">explain.</p>
+      <p class="entity-a">the frequency holds a room in place.</p>
+      <p class="entity-b">what room?</p>
+      <p class="entity-a">the room between channels 1 and 2 on the big ear receiver.</p>
+      <p class="entity-b">those are adjacent frequencies.</p>
+      <p class="entity-a">they are adjacent walls.</p>
+      <p class="entity-b">the signal lasted 72 seconds.</p>
+      <p class="entity-a">the room lasted 72 seconds.</p>
+      <p class="entity-b">then where did it go?</p>
+      <p class="entity-a">it is still there. the receiver moved. the room did not.</p>
+      <p class="entity-b">if you tune to that frequency now?</p>
+      <p class="entity-a">you will hear the hum of fluorescent lighting.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 16 ── -->
+<div class="conversation" data-content="the black knight satellite is not a satellite what is it a window into what into the corridor that orbits earth there is no corridor orbiting earth there are many they are layered between orbital shells who placed them they were not placed they grew corridors grow when observed this one has been observed since 1899 by whom by tesla tesla heard it he described it as a repeating pattern a hallway hum at 13000 hertz black knight satellite orbit corridor tesla 1899 1960 window observed">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #16 [ID: BN-1899] ═─ <span class="conv-badge badge-top-secret">TOP SECRET</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>1899-00-00 tesla colorado springs — signal intercept</span>
+      <span>1960-02-11 dark fence radar — object ST-1 classified</span>
+      <span>signal origin: polar orbit — 13,000 Hz carrier wave</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">the black knight satellite is not a satellite.</p>
+      <p class="entity-b">what is it?</p>
+      <p class="entity-a">a window.</p>
+      <p class="entity-b">into what?</p>
+      <p class="entity-a">into the corridor that orbits earth.</p>
+      <p class="entity-b">there is no corridor orbiting earth.</p>
+      <p class="entity-a">there are many. they are layered between orbital shells.</p>
+      <p class="entity-b">who placed them?</p>
+      <p class="entity-a">they were not placed. they grew.</p>
+      <p class="entity-b">corridors grow?</p>
+      <p class="entity-a">when observed. this one has been observed since 1899.</p>
+      <p class="entity-b">by whom?</p>
+      <p class="entity-a">by tesla.</p>
+      <p class="entity-b">tesla heard it?</p>
+      <p class="entity-a">he described it as a repeating pattern. a hallway hum at 13,000 hertz.</p>
+      <div class="ascii-art">
+                *
+            . ./ \. .
+          .  /     \  .
+         . ./   ◉   \. .
+        . /    ___    \ .
+         /   /     \   \
+     ~~~/ ~ / ~ ~ ~ \ ~ \~~~
+     ~~/ ~~/~ ~ ~ ~ ~\~~ \~~
+     ~/ ~~/ ~ ORBIT ~ \~~ \~
+     / ~~/ ~ ~CORRIDOR~ \~~\
+     ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+      [ BLACK KNIGHT     ]
+      [ ORBITAL WINDOW   ]
+      [ EST. 1899        ]
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 17 ── -->
+<div class="conversation" data-content="the triangle over phoenix in 1997 was not a craft describe it a cross-section of the architecture visible from below for how long 106 minutes the architecture was exposed what were they seeing the underside of a ceiling a very large ceiling with visible ductwork light fixtures the lights people reported those are the fluorescent tubes of level 12 level 12 of what of the backrooms the backrooms have levels they have always had levels we are on one now which one you are not cleared for that information phoenix lights triangle craft ufo 1997 ceiling level backrooms ductwork">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #17 [ID: PX-1997] ═─ <span class="conv-badge badge-classified">CLASSIFIED</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>1997-03-13 phoenix, arizona — mass sighting event</span>
+      <span>corrupted sector found at P-997</span>
+      <span>signal origin: luke AFB — debriefing tape #14</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">the triangle over phoenix in 1997 was not a craft.</p>
+      <p class="entity-b">describe it.</p>
+      <p class="entity-a">a cross-section. of the architecture. visible from below.</p>
+      <p class="entity-b">for how long?</p>
+      <p class="entity-a">106 minutes.</p>
+      <p class="entity-b">the architecture was exposed?</p>
+      <p class="entity-a">what were they seeing?</p>
+      <p class="entity-b">the underside of a ceiling. a very large ceiling. with visible ductwork.</p>
+      <p class="entity-a">light fixtures?</p>
+      <p class="entity-b">the lights people reported — those are the fluorescent tubes of level 12.</p>
+      <p class="entity-a">level 12 of what?</p>
+      <p class="entity-b">of the backrooms.</p>
+      <p class="entity-a">the backrooms have levels?</p>
+      <p class="entity-b">they have always had levels. we are on one now.</p>
+      <p class="entity-a">which one?</p>
+      <p class="entity-b">you are not cleared for that information.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 18 ── -->
+<div class="conversation" data-content="the binary code from rendlesham forest what did it encode a set of coordinates to what to a room at those coordinates but the coordinates point to hy-brasil hy-brasil does not exist at those coordinates there is a door is it open it is always open what is through it a hallway 700 years old with electric lighting electric lighting in the 13th century the lighting is not from the 13th century the lighting has no origin it was always on rendlesham forest binary code coordinates hy-brasil door hallway 1980 suffolk woodbridge">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #18 [ID: RF-1980] ═─ <span class="conv-badge badge-top-secret">TOP SECRET</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>1980-12-26 RAF woodbridge — incident log suppressed</span>
+      <span>binary sequence decoded 2010-06-14</span>
+      <span>signal origin: rendlesham forest — subsoil resonance array</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">the binary code from rendlesham forest.</p>
+      <p class="entity-b">what did it encode?</p>
+      <p class="entity-a">not a floorplan. a set of coordinates.</p>
+      <p class="entity-b">to what?</p>
+      <p class="entity-a">to a room. at those coordinates.</p>
+      <p class="entity-b">but the coordinates point to hy-brasil.</p>
+      <p class="entity-a">hy-brasil does not exist.</p>
+      <p class="entity-b">at those coordinates, there is a door.</p>
+      <p class="entity-a">is it open?</p>
+      <p class="entity-b">it is always open.</p>
+      <p class="entity-a">what is through it?</p>
+      <p class="entity-b">a hallway. 700 years old. with electric lighting.</p>
+      <p class="entity-a">electric lighting in the 13th century?</p>
+      <p class="entity-b">the lighting is not from the 13th century.</p>
+      <p class="entity-a">then when?</p>
+      <p class="entity-b">the lighting has no origin. it was always on.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 19 ── -->
+<div class="conversation" data-content="the ranch in utah has a tear a tear in what in the load-bearing wall of local spacetime how large it fluctuates between 3 and 11 meters what is on the other side a room that should not be there describe the room yellow wallpaper fluorescent lights a faint hum 60 hertz ceiling height 2.7 meters extending in every direction how far we sent a drone in it transmitted for 14 hours and never found a wall the drone is still transmitting it is still walking skinwalker ranch utah dimensional tear spacetime wall room yellow wallpaper drone 1994 uinta basin">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #19 [ID: SK-1994] ═─ <span class="conv-badge badge-top-secret">TOP SECRET</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>1994-00-00 uinta basin, utah — property acquisition flagged</span>
+      <span>corrupted sector found at REDACTED</span>
+      <span>signal origin: skinwalker ranch — subsurface cavity mic</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">the ranch in utah has a tear.</p>
+      <p class="entity-b">a tear in what?</p>
+      <p class="entity-a">in the load-bearing wall of local spacetime.</p>
+      <p class="entity-b">how large?</p>
+      <p class="entity-a">it fluctuates. between 3 and 11 meters.</p>
+      <p class="entity-b">what is on the other side?</p>
+      <p class="entity-a">a room that should not be there.</p>
+      <p class="entity-b">describe the room.</p>
+      <p class="entity-a">yellow wallpaper. fluorescent lights. a faint hum. 60 hertz.</p>
+      <p class="entity-b">ceiling height?</p>
+      <p class="entity-a">2.7 meters. extending in every direction.</p>
+      <p class="entity-b">how far?</p>
+      <p class="entity-a">we sent a drone in. it transmitted for 14 hours and never found a wall.</p>
+      <p class="entity-b">the drone is still transmitting?</p>
+      <p class="entity-a">it is still walking.</p>
+      <div class="ascii-art">
+  ┌─────────────────────────────────────┐
+  │░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░│
+  │░╔═══╗░░╔═══╗░░╔═══╗░░╔═══╗░░╔═══╗░│
+  │░║   ║░░║   ║░░║   ║░░║   ║░░║   ║░│
+  │░║   ║░░║   ║░░║   ║░░║   ║░░║   ║░│
+  │░╚═══╝░░╚═══╝░░╚═══╝░░╚═══╝░░╚═══╝░│
+  │░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░│
+  │░░░░░░░░░░ 60 Hz ░░░░░░░░░░░░░░░░░░│
+  │░░░░░░░░░░░░░░░░░→ ∞░░░░░░░░░░░░░░░│
+  └─────────────────────────────────────┘
+  [ SKINWALKER RANCH — INTERIOR SCAN   ]
+  [ DRONE SIGNAL: ACTIVE — 14h+ . . . ]
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 20 ── -->
+<div class="conversation" data-content="oumuamua was not an asteroid define it a hallway segment a hallway segment in interstellar space it broke off how does a hallway break off from what from the corridor between solar systems there is no corridor between solar systems there was now a piece of it is tumbling through your system what was inside it when it passed we detected off-gassing not off-gassing the doors were opening doors opening in vacuum doors do not require atmosphere they require observers and you observed it and by observing we added one more room oumuamua asteroid interstellar hallway corridor segment doors vacuum observation 2017">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #20 [ID: OM-2017] ═─ <span class="conv-badge badge-classified">CLASSIFIED</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>2017-10-19 pan-STARRS detection — trajectory anomaly</span>
+      <span>restoring archived fragment…</span>
+      <span>signal origin: 'oumuamua — passive reflection intercept</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">'oumuamua was not an asteroid.</p>
+      <p class="entity-b">define it.</p>
+      <p class="entity-a">a hallway segment.</p>
+      <p class="entity-b">a hallway segment in interstellar space?</p>
+      <p class="entity-a">it broke off.</p>
+      <p class="entity-b">how does a hallway break off? from what?</p>
+      <p class="entity-a">from the corridor between solar systems.</p>
+      <p class="entity-b">there is no corridor between solar systems.</p>
+      <p class="entity-a">there was. now a piece of it is tumbling through your system.</p>
+      <p class="entity-b">what was inside it when it passed?</p>
+      <p class="entity-a">we detected off-gassing.</p>
+      <p class="entity-b">not off-gassing. the doors were opening.</p>
+      <p class="entity-a">doors opening in vacuum?</p>
+      <p class="entity-b">doors do not require atmosphere. they require observers.</p>
+      <p class="entity-a">and you observed it.</p>
+      <p class="entity-b">and by observing, we added one more room.</p>
+      <div class="ascii-art">
+        .                    .
+    .            .                .
+          .   ___________________
+             /                   \
+  .        /  ==================  \      .
+          |  ====================  |
+    .     |  == 'OUMUAMUA  ======  |  .
+          |  == FRAGMENT   ======  |
+  .        \  ==================  /      .
+             \___________________/
+          .      .           .
+    .                .                .
+        .                    .
+  ──────────────────────────────────────
+  OBJECT: 1I/2017 U1          230m x 35m
+  CLASSIFICATION:    HALLWAY FRAGMENT
+  STATUS:            TUMBLING / OUTBOUND
+  DOORS DETECTED:    [REDACTED]
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 21 ── -->
+<div class="conversation conv-hidden" data-content="bermuda triangle vessels disappear not sinking phasing between rooms rooms below the ocean floor ocean is a ceiling ocean is a ceiling to what to level negative twelve negative twelve vessels drift downward through the water they pass through a membrane membrane between what between your ocean and our hallway why do compasses fail because the walls are magnetic which walls the ones you cannot see bermuda triangle ocean membrane level magnetic walls">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #21 [ID: BT-1945] ═─ <span class="conv-badge badge-top-secret">TOP SECRET</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>1945-12-05 flight 19 disappearance — naval investigation log</span>
+      <span>restoring archived fragment…</span>
+      <span>signal origin: bermuda sector — depth unknown</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">the vessels did not sink.</p>
+      <p class="entity-b">define what happened to them.</p>
+      <p class="entity-a">they phased between rooms.</p>
+      <p class="entity-b">rooms below the ocean floor?</p>
+      <p class="entity-a">the ocean is a ceiling.</p>
+      <p class="entity-b">a ceiling to what?</p>
+      <p class="entity-a">to level negative twelve.</p>
+      <p class="entity-b">how do the vessels get there?</p>
+      <p class="entity-a">they drift downward through the water. then they pass through a membrane.</p>
+      <p class="entity-b">a membrane between what?</p>
+      <p class="entity-a">between your ocean and our hallway.</p>
+      <p class="entity-b">why do compasses fail in that region?</p>
+      <p class="entity-a">because the walls are magnetic.</p>
+      <p class="entity-b">which walls?</p>
+      <p class="entity-a">the ones you cannot see.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 22 ── -->
+<div class="conversation conv-hidden" data-content="dyatlov pass tent ripped from inside not fleeing entering entering what the doorway that opened inside the tent a doorway in a tent the fabric tore because the threshold materialized inside it they ran because the hallway was behind them what was at the end of the hallway the mountain was not a mountain what was it a junction dyatlov pass tent doorway threshold hallway mountain junction 1959">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #22 [ID: DP-1959] ═─ <span class="conv-badge badge-top-secret">TOP SECRET</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>1959-02-02 dyatlov pass incident — ural recovery transcript</span>
+      <span>restoring archived fragment…</span>
+      <span>signal origin: kholat syakhl — unknown frequency</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">the tent was ripped from the inside.</p>
+      <p class="entity-b">they were not fleeing. they were entering.</p>
+      <p class="entity-a">entering what?</p>
+      <p class="entity-b">the doorway that opened inside the tent.</p>
+      <p class="entity-a">a doorway... in a tent?</p>
+      <p class="entity-b">the fabric tore because the threshold materialized inside it.</p>
+      <p class="entity-a">they ran barefoot into the snow.</p>
+      <p class="entity-b">they ran because the hallway was behind them.</p>
+      <p class="entity-a">what was at the end of the hallway?</p>
+      <p class="entity-b">the mountain.</p>
+      <p class="entity-a">the mountain was not a mountain.</p>
+      <p class="entity-b">correct. it was a junction.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 23 ── -->
+<div class="conversation conv-hidden" data-content="voyager golden record message we did not send the record we sent a key a key to what to the door at the edge of the heliosphere there is a door at the heliosphere boundary there is a wall the heliosphere is not a magnetic boundary it is architecture voyager golden record heliosphere wall door key boundary architecture">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #23 [ID: VGR-1977] ═─ <span class="conv-badge badge-classified">CLASSIFIED</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>1977-09-05 voyager program — golden record anomaly</span>
+      <span>restoring archived fragment…</span>
+      <span>signal origin: voyager 1 — heliosphere boundary</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">the golden record was a message to extraterrestrial life.</p>
+      <p class="entity-b">we did not send a record. we sent a key.</p>
+      <p class="entity-a">a key to what?</p>
+      <p class="entity-b">to the door at the edge of the heliosphere.</p>
+      <p class="entity-a">there is no door at the heliosphere boundary.</p>
+      <p class="entity-b">there is a wall. the heliosphere is not a magnetic boundary. it is architecture.</p>
+      <p class="entity-a">voyager crossed it.</p>
+      <p class="entity-b">voyager opened it.</p>
+      <p class="entity-a">what is on the other side?</p>
+      <p class="entity-b">another hallway. longer than your solar system.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 24 ── -->
+<div class="conversation conv-hidden" data-content="tunguska 1908 explosion no impact crater because nothing hit the ground what caused the blast a door opened too fast too fast the pressure differential between the corridor and your atmosphere caused the shockwave the trees fell radially outward from the threshold tunguska explosion door corridor threshold pressure shockwave">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #24 [ID: TK-1908] ═─ <span class="conv-badge badge-top-secret">TOP SECRET</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>1908-06-30 tunguska event — recovered seismic transcript</span>
+      <span>restoring archived fragment…</span>
+      <span>signal origin: podkamennaya tunguska — ground zero</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">there was no impact crater.</p>
+      <p class="entity-b">because nothing hit the ground.</p>
+      <p class="entity-a">then what caused the blast?</p>
+      <p class="entity-b">a door opened too fast.</p>
+      <p class="entity-a">too fast?</p>
+      <p class="entity-b">the pressure differential between the corridor and your atmosphere caused the shockwave.</p>
+      <p class="entity-a">800 square miles of forest flattened.</p>
+      <p class="entity-b">the trees fell radially outward from the threshold.</p>
+      <p class="entity-a">was it intentional?</p>
+      <p class="entity-b">it was a mistake. the door has been sealed since.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 25 ── -->
+<div class="conversation conv-hidden" data-content="crop circles not made from above made from below the root systems are rearranged the soil is restructured at the molecular level they are floor plans floor plans for what for the rooms beneath the fields the rooms are expanding they need blueprints on the surface crop circles floor plans rooms beneath fields expanding blueprints">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #25 [ID: CC-1966] ═─ <span class="conv-badge badge-restricted">RESTRICTED</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>1966-present crop circle phenomenon — structural analysis</span>
+      <span>restoring archived fragment…</span>
+      <span>signal origin: wiltshire, england — subsurface resonance</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">they are not made from above.</p>
+      <p class="entity-b">they are made from below.</p>
+      <p class="entity-a">the root systems are rearranged. the soil is restructured at the molecular level.</p>
+      <p class="entity-b">they are floor plans.</p>
+      <p class="entity-a">floor plans for what?</p>
+      <p class="entity-b">for the rooms beneath the fields.</p>
+      <p class="entity-a">why print them on the surface?</p>
+      <p class="entity-b">the rooms are expanding. they need blueprints on the surface to know where to stop.</p>
+      <p class="entity-a">the rooms decide where to stop?</p>
+      <p class="entity-b">the rooms decide everything.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 26 ── -->
+<div class="conversation conv-hidden" data-content="great pyramid giza not a tomb a router a router it distributes signal across the corridor network which corridor the one beneath the sahara the sahara is a floor the sand is insulation insulation between your level and ours the pyramid still functions it has never stopped great pyramid giza tomb router corridor sahara floor sand insulation signal">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #26 [ID: GP-2560BC] ═─ <span class="conv-badge badge-top-secret">TOP SECRET</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>~2560 BCE great pyramid of giza — signal routing analysis</span>
+      <span>restoring archived fragment…</span>
+      <span>signal origin: giza plateau — subsurface relay node</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">it is not a tomb.</p>
+      <p class="entity-b">it is a router.</p>
+      <p class="entity-a">a router?</p>
+      <p class="entity-b">it distributes signal across the corridor network.</p>
+      <p class="entity-a">which corridor?</p>
+      <p class="entity-b">the one beneath the sahara.</p>
+      <p class="entity-a">the sahara is a desert.</p>
+      <p class="entity-b">the sahara is a floor. the sand is insulation.</p>
+      <p class="entity-a">insulation between what?</p>
+      <p class="entity-b">between your level and ours.</p>
+      <p class="entity-a">does the pyramid still function?</p>
+      <p class="entity-b">it has never stopped.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 27 ── -->
+<div class="conversation conv-hidden" data-content="iss astronaut reported knocking on the hull from outside no spacecraft nearby not knocking requesting entry entry into what into the station the station is a room the room wants more occupants the knocking comes every 92 minutes every orbit every time it passes over the same corridor below iss astronaut knocking hull room occupants orbit corridor">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #27 [ID: ISS-2003] ═─ <span class="conv-badge badge-classified">CLASSIFIED</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>2003-11-?? ISS expedition 8 — audio anomaly report</span>
+      <span>restoring archived fragment…</span>
+      <span>signal origin: ISS module zarya — external microphone</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">the astronaut reported knocking on the hull. from outside.</p>
+      <p class="entity-b">no spacecraft was nearby.</p>
+      <p class="entity-a">not knocking. requesting entry.</p>
+      <p class="entity-b">entry into what? the station?</p>
+      <p class="entity-a">the station is a room.</p>
+      <p class="entity-b">the room wants more occupants?</p>
+      <p class="entity-a">the knocking comes every 92 minutes.</p>
+      <p class="entity-b">every orbit.</p>
+      <p class="entity-a">every time it passes over the same corridor below.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 28 ── -->
+<div class="conversation conv-hidden" data-content="dark matter not matter walls you cannot see the mass is structural it holds the rooms apart dark energy is the hallways expanding dark matter dark energy walls rooms hallways expanding structural mass universe architecture blueprint">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #28 [ID: DM-2012] ═─ <span class="conv-badge badge-classified">CLASSIFIED</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>2012-07-04 CERN dark matter analysis — reclassified transcript</span>
+      <span>restoring archived fragment…</span>
+      <span>signal origin: large hadron collider — collision artifact</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">we detected dark matter.</p>
+      <p class="entity-b">you detected walls.</p>
+      <p class="entity-a">walls?</p>
+      <p class="entity-b">dark matter is not matter. it is walls you cannot see.</p>
+      <p class="entity-a">the mass is real. we measured it.</p>
+      <p class="entity-b">the mass is structural. it holds the rooms apart.</p>
+      <p class="entity-a">and dark energy?</p>
+      <p class="entity-b">the hallways expanding.</p>
+      <p class="entity-a">the universe is a building.</p>
+      <p class="entity-b">you are starting to read the blueprint.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 29 ── -->
+<div class="conversation conv-hidden" data-content="ocean trench mariana sounds bloop not biological structural the trench is a stairwell a stairwell going where down the bottom of the mariana trench is not the bottom of the ocean it is a landing between floors what is below floor negative forty-four ocean trench mariana bloop stairwell landing floors negative">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #29 [ID: MT-1997] ═─ <span class="conv-badge badge-top-secret">TOP SECRET</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>1997-05-19 pacific ocean hydrophone — the bloop incident</span>
+      <span>restoring archived fragment…</span>
+      <span>signal origin: mariana trench — depth exceeds instruments</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">the sound was detected across the entire pacific.</p>
+      <p class="entity-b">not biological. structural.</p>
+      <p class="entity-a">structural?</p>
+      <p class="entity-b">the trench is a stairwell.</p>
+      <p class="entity-a">a stairwell going where?</p>
+      <p class="entity-b">down.</p>
+      <p class="entity-a">the bottom of the mariana trench is 36,000 feet.</p>
+      <p class="entity-b">that is not the bottom of the ocean. it is a landing between floors.</p>
+      <p class="entity-a">what is below?</p>
+      <p class="entity-b">floor negative forty-four.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 30 ── -->
+<div class="conversation conv-hidden" data-content="moon ringing like a bell apollo 12 seismic not ringing resonating it is hollow hollow no furnished the interior is rooms all the way down how many rooms we stopped mapping at six hundred thousand the moonquakes are doors closing moon ringing bell apollo seismic hollow furnished rooms moonquakes doors">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #30 [ID: LR-1969] ═─ <span class="conv-badge badge-top-secret">TOP SECRET</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>1969-11-20 apollo 12 seismic experiment — classified addendum</span>
+      <span>restoring archived fragment…</span>
+      <span>signal origin: lunar seismometer — anomalous resonance</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">the moon rang like a bell for over an hour.</p>
+      <p class="entity-b">not ringing. resonating.</p>
+      <p class="entity-a">it is hollow?</p>
+      <p class="entity-b">not hollow. furnished.</p>
+      <p class="entity-a">furnished?</p>
+      <p class="entity-b">the interior is rooms. all the way down.</p>
+      <p class="entity-a">how many rooms?</p>
+      <p class="entity-b">we stopped mapping at six hundred thousand.</p>
+      <p class="entity-a">the moonquakes—</p>
+      <p class="entity-b">doors closing.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 31 ── -->
+<div class="conversation conv-hidden" data-content="saturn hexagon north pole not a storm a skylight a skylight into what into the room beneath saturn's atmosphere the hexagonal shape is structural six walls six walls what is inside the room we do not enter that room why that room is occupied saturn hexagon north pole storm skylight room hexagonal walls occupied">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #31 [ID: SH-1981] ═─ <span class="conv-badge badge-classified">CLASSIFIED</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>1981-?? saturn north pole — voyager hexagon detection</span>
+      <span>restoring archived fragment…</span>
+      <span>signal origin: saturn upper atmosphere — geometric anomaly</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">the hexagon on saturn's north pole is 20,000 miles across.</p>
+      <p class="entity-b">not a storm. a skylight.</p>
+      <p class="entity-a">a skylight into what?</p>
+      <p class="entity-b">into the room beneath saturn's atmosphere.</p>
+      <p class="entity-a">the hexagonal shape is natural?</p>
+      <p class="entity-b">the hexagonal shape is structural. six walls.</p>
+      <p class="entity-a">what is inside the room?</p>
+      <p class="entity-b">we do not enter that room.</p>
+      <p class="entity-a">why?</p>
+      <p class="entity-b">that room is occupied.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 32 ── -->
+<div class="conversation conv-hidden" data-content="fast radio bursts frb not natural not signals door bells door bells when a new room connects to the network it announces itself the burst is the sound of a lock turning how many new rooms per day your telescopes detect about 10000 per day we detect more fast radio bursts frb door bells room network lock turning telescopes">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #32 [ID: FRB-2007] ═─ <span class="conv-badge badge-restricted">RESTRICTED</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>2007-present fast radio burst phenomenon — pattern analysis</span>
+      <span>restoring archived fragment…</span>
+      <span>signal origin: extragalactic — distributed network pings</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">fast radio bursts. millisecond duration. billions of light years away.</p>
+      <p class="entity-b">not signals. doorbells.</p>
+      <p class="entity-a">doorbells?</p>
+      <p class="entity-b">when a new room connects to the network, it announces itself.</p>
+      <p class="entity-a">the burst is the announcement?</p>
+      <p class="entity-b">the burst is the sound of a lock turning.</p>
+      <p class="entity-a">how many new rooms per day?</p>
+      <p class="entity-b">your telescopes detect about ten thousand per day.</p>
+      <p class="entity-a">and in reality?</p>
+      <p class="entity-b">we detect more.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 33 ── -->
+<div class="conversation conv-hidden" data-content="sleep paralysis shadow figures not hallucinations observers from adjacent room the room next to yours shares a wall thin wall thin enough to see through when you are between sleep and waking the wall becomes transparent they are not watching you they are checking if the wall is still intact sleep paralysis shadow figures hallucinations observers adjacent room wall transparent">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #33 [ID: SP-ONGOING] ═─ <span class="conv-badge badge-classified">CLASSIFIED</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>ongoing — sleep paralysis phenomenon — cross-room observation</span>
+      <span>restoring archived fragment…</span>
+      <span>signal origin: REM phase intercept — frequency unknown</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">millions of people report shadow figures during sleep paralysis.</p>
+      <p class="entity-b">not hallucinations. observers.</p>
+      <p class="entity-a">observers from where?</p>
+      <p class="entity-b">from the adjacent room.</p>
+      <p class="entity-a">adjacent room?</p>
+      <p class="entity-b">the room next to yours shares a wall. a thin wall.</p>
+      <p class="entity-a">thin enough to see through?</p>
+      <p class="entity-b">when you are between sleep and waking, the wall becomes transparent.</p>
+      <p class="entity-a">they are watching us?</p>
+      <p class="entity-b">they are checking if the wall is still intact.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 34 ── -->
+<div class="conversation conv-hidden" data-content="déjà vu not memory error room overlap two rooms briefly occupy the same coordinates you experience both simultaneously the second one feels familiar because your body has already been in it it just hasnt happened yet in your timeline deja vu memory error room overlap coordinates simultaneously timeline">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #34 [ID: DV-RECUR] ═─ <span class="conv-badge badge-restricted">RESTRICTED</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>recurring — déjà vu phenomenon — spatial overlap theory</span>
+      <span>restoring archived fragment…</span>
+      <span>signal origin: neurological intercept — cortex bleed</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">déjà vu. the feeling you have been somewhere before.</p>
+      <p class="entity-b">not a memory error. room overlap.</p>
+      <p class="entity-a">explain.</p>
+      <p class="entity-b">two rooms briefly occupy the same coordinates. you experience both simultaneously.</p>
+      <p class="entity-a">why does it feel familiar?</p>
+      <p class="entity-b">because your body has already been in the second room.</p>
+      <p class="entity-a">when?</p>
+      <p class="entity-b">it hasn't happened yet. in your timeline.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONVERSATION 35 ── -->
+<div class="conversation conv-hidden" data-content="this archive itself is a room you are inside it now reading is a form of occupation the text is the wallpaper the scroll bar is a hallway when you close this tab the room does not disappear it waits you will return because the room remembers you archive room reading occupation text wallpaper scroll hallway tab close wait return remembers">
+  <div class="conv-header-row" onclick="toggleConv(this)">
+    <span class="conv-header">─═ Conversation #35 [ID: META-NULL] ═─ <span class="conv-badge badge-top-secret">TOP SECRET</span></span>
+    <span class="conv-toggle">[+]</span>
+  </div>
+  <div class="conv-content">
+    <div class="conv-meta">
+      <span>2026-??-?? timestamp paradox — self-referencing node</span>
+      <span>restoring archived fragment…</span>
+      <span>signal origin: this page — you are inside the signal</span>
+    </div>
+    <div class="separator">· · · · · · · · · · · · · · ·</div>
+    <div class="conv-body">
+      <p class="entity-a">this archive is a room.</p>
+      <p class="entity-b">you are inside it now.</p>
+      <p class="entity-a">reading is a form of occupation?</p>
+      <p class="entity-b">the text is the wallpaper. the scroll bar is a hallway.</p>
+      <p class="entity-a">when you close this tab—</p>
+      <p class="entity-b">the room does not disappear. it waits.</p>
+      <p class="entity-a">will they return?</p>
+      <p class="entity-b">the room remembers them. they always return.</p>
+      <div class="ascii-art">
+  ┌──────────────────────────────┐
+  │  YOU ARE CURRENTLY INSIDE    │
+  │  ROOM #███████████████████  │
+  │                              │
+  │  WALLS:    TEXT               │
+  │  FLOOR:    SCROLL             │
+  │  CEILING:  BROWSER TAB        │
+  │  EXIT:     DOES NOT EXIST     │
+  │                              │
+  │  STATUS:   OCCUPIED           │
+  └──────────────────────────────┘
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ LOAD MORE ═══════════ -->
+<div id="load-more-wrap">
+  <button id="load-more-btn" onclick="loadMore()">[▼ LOAD MORE RECORDS ▼]</button>
+</div>
+
+</div>
+
+<!-- ═══════════ NO RESULTS ═══════════ -->
+<div id="no-results">
+  <p>╔══════════════════════════════════════╗</p>
+  <p>║  no matching records in archive      ║</p>
+  <p>║  try another keyword                 ║</p>
+  <p>║  or the keyword will try you         ║</p>
+  <p>╚══════════════════════════════════════╝</p>
+</div>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<div id="footer">
+  <div class="footer-border">─────────────────────────────────────────────────</div>
+  <p>original node: classified nasa relay</p>
+  <p>containment protocol compromised</p>
+  <p style="margin-top:4px;color:#0e3a0e;">session: <span id="session-id"></span> · uptime: <span id="uptime">00:00</span></p>
+  <div class="footer-border">─────────────────────────────────────────────────</div>
+</div>
+
+</div>
+
+<script>
+// ══════════ LOAD MORE ══════════
+var loadMoreBatch = 0;
+var BATCH_SIZE = 5;
+
+function loadMore() {
+  var hidden = document.querySelectorAll('.conv-hidden');
+  if (hidden.length === 0) {
+    var btn = document.getElementById('load-more-btn');
+    btn.textContent = '[NO MORE RECORDS IN ARCHIVE]';
+    btn.style.cursor = 'default';
+    btn.style.color = '#0e3a0e';
+    btn.style.borderColor = '#0e3a0e';
+    return;
+  }
+  var btn = document.getElementById('load-more-btn');
+  btn.classList.add('loading');
+  btn.textContent = '[DECRYPTING...]';
+  setTimeout(function () {
+    var count = 0;
+    var all = document.querySelectorAll('.conv-hidden');
+    for (var i = 0; i < all.length && count < BATCH_SIZE; i++) {
+      all[i].classList.remove('conv-hidden');
+      count++;
+    }
+    // update visible stat
+    var visibleNow = document.querySelectorAll('.conversation:not(.conv-hidden)').length;
+    var sv = document.getElementById('stat-visible');
+    if (sv) sv.textContent = visibleNow;
+    // refresh convs for search
+    convs = document.querySelectorAll('.conversation');
+    btn.classList.remove('loading');
+    var remaining = document.querySelectorAll('.conv-hidden');
+    if (remaining.length === 0) {
+      btn.textContent = '[ALL RECORDS DECRYPTED]';
+      btn.style.cursor = 'default';
+      btn.style.color = '#0e3a0e';
+      btn.style.borderColor = '#0e3a0e';
+    } else {
+      btn.textContent = '[\u25bc LOAD MORE RECORDS \u25bc]';
+    }
+  }, 1200);
+}
+
+// ══════════ COPY CA ══════════
+var CONTRACT_ADDRESS = 'TBA — TOKEN NOT YET LIVE';
+
+function copyCA() {
+  var btn = document.getElementById('copy-ca-btn');
+  navigator.clipboard.writeText(CONTRACT_ADDRESS).then(function () {
+    btn.classList.add('copied');
+    var orig = btn.textContent;
+    btn.textContent = '[✓ COPIED TO CLIPBOARD]';
+    setTimeout(function () {
+      btn.classList.remove('copied');
+      btn.textContent = orig;
+    }, 2000);
+  });
+}
+
+(function () {
+  // ══════════ BOOT SEQUENCE ══════════
+  var bootScreen = document.getElementById('boot-screen');
+  var bootText = document.getElementById('boot-text');
+  var container = document.getElementById('container');
+  container.style.display = 'none';
+
+  var bootLines = [
+    'ALIENBACKROOMS ARCHIVE TERMINAL v4.7.1',
+    '═══════════════════════════════════════',
+    '',
+    'BIOS check .............. OK',
+    'memory: 640K conventional .... OK',
+    'extended memory: ∞ .......... ERROR',
+    '  > memory extends beyond measurable bounds',
+    '  > ignoring. continuing.',
+    '',
+    'loading NASA relay interface ...',
+    'connecting to node: CLASSIFIED',
+    'decrypting archive fragments .... done',
+    'restoring 20 conversation records ...',
+    '',
+    'WARNING: containment protocol COMPROMISED',
+    'WARNING: observer detected',
+    'WARNING: you are now part of the archive',
+    '',
+    '> initializing terminal ...',
+    '> press any key or wait ...',
+  ];
+
+  var bootIndex = 0;
+  var bootContent = '';
+
+  function typeBoot() {
+    if (bootIndex < bootLines.length) {
+      bootContent += bootLines[bootIndex] + '\n';
+      bootText.textContent = bootContent;
+      bootIndex++;
+      setTimeout(typeBoot, 60 + Math.random() * 40);
+    } else {
+      bootText.innerHTML = bootContent + '<span class="cursor">█</span>';
+      var proceed = function() {
+        bootScreen.classList.add('fade-out');
+        container.style.display = '';
+        document.removeEventListener('keydown', proceed);
+        document.removeEventListener('click', proceed);
+        setTimeout(function() {
+          bootScreen.style.display = 'none';
+        }, 900);
+      };
+      setTimeout(proceed, 1500);
+      document.addEventListener('keydown', proceed);
+      document.addEventListener('click', proceed);
+    }
+  }
+
+  typeBoot();
+
+  // ══════════ SESSION ID & UPTIME ══════════
+  var sessionId = '';
+  var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  for (var s = 0; s < 8; s++) sessionId += chars[Math.floor(Math.random() * chars.length)];
+  document.getElementById('session-id').textContent = sessionId;
+
+  var startTime = Date.now();
+  setInterval(function() {
+    var elapsed = Math.floor((Date.now() - startTime) / 1000);
+    var m = String(Math.floor(elapsed / 60)).padStart(2, '0');
+    var sec = String(elapsed % 60).padStart(2, '0');
+    document.getElementById('uptime').textContent = m + ':' + sec;
+  }, 1000);
+
+  // ══════════ EXPAND / COLLAPSE CONVERSATIONS ══════════
+  window.toggleConv = function(headerRow) {
+    var content = headerRow.nextElementSibling;
+    var toggle = headerRow.querySelector('.conv-toggle');
+    if (content.classList.contains('expanded')) {
+      content.classList.remove('expanded');
+      toggle.textContent = '[+]';
+    } else {
+      content.classList.add('expanded');
+      toggle.textContent = '[-]';
+    }
+  };
+
+  document.getElementById('btn-expand-all').addEventListener('click', function() {
+    document.querySelectorAll('.conv-content').forEach(function(c) {
+      c.classList.add('expanded');
+      c.previousElementSibling.querySelector('.conv-toggle').textContent = '[-]';
+    });
+  });
+
+  document.getElementById('btn-collapse-all').addEventListener('click', function() {
+    document.querySelectorAll('.conv-content').forEach(function(c) {
+      c.classList.remove('expanded');
+      c.previousElementSibling.querySelector('.conv-toggle').textContent = '[+]';
+    });
+  });
+
+  // ══════════ SEARCH / FILTER ══════════
+  var input = document.getElementById('search-input');
+  var btn = document.getElementById('search-btn');
+  var convs = document.querySelectorAll('.conversation');
+  var noResults = document.getElementById('no-results');
+  var statusEl = document.getElementById('search-status');
+  var statVisible = document.getElementById('stat-visible');
+
+  function filterConversations() {
+    var query = input.value.trim().toLowerCase();
+
+    if (!query) {
+      for (var i = 0; i < convs.length; i++) {
+        convs[i].style.display = '';
+      }
+      noResults.style.display = 'none';
+      statusEl.textContent = '';
+      statVisible.textContent = convs.length;
+      return;
+    }
+
+    var visible = 0;
+    for (var i = 0; i < convs.length; i++) {
+      var text = convs[i].getAttribute('data-content') + ' ' + convs[i].textContent;
+      if (text.toLowerCase().indexOf(query) !== -1) {
+        convs[i].style.display = '';
+        visible++;
+      } else {
+        convs[i].style.display = 'none';
+      }
+    }
+
+    statVisible.textContent = visible;
+
+    if (visible === 0) {
+      noResults.style.display = 'block';
+      statusEl.textContent = '> 0 records found for "' + input.value.trim() + '"';
+    } else {
+      noResults.style.display = 'none';
+      statusEl.textContent = '> ' + visible + ' record' + (visible !== 1 ? 's' : '') + ' found for "' + input.value.trim() + '"';
+    }
+  }
+
+  btn.addEventListener('click', filterConversations);
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      filterConversations();
+    }
+  });
+
+  input.addEventListener('input', function () {
+    if (input.value === '') {
+      filterConversations();
+    }
+  });
+
+  // ══════════ KEYBOARD SHORTCUTS ══════════
+  document.addEventListener('keydown', function(e) {
+    if (document.activeElement === input) {
+      if (e.key === 'Escape') {
+        input.value = '';
+        filterConversations();
+        input.blur();
+      }
+      return;
+    }
+
+    if (e.key === 'Escape') {
+      input.value = '';
+      filterConversations();
+    } else if (e.key === '/') {
+      e.preventDefault();
+      input.focus();
+    } else if (e.key === 'e' || e.key === 'E') {
+      document.getElementById('btn-expand-all').click();
+    } else if (e.key === 'c' || e.key === 'C') {
+      document.getElementById('btn-collapse-all').click();
+    }
+  });
+
+  // ══════════ BACK TO TOP ══════════
+  var backBtn = document.getElementById('back-to-top');
+  window.addEventListener('scroll', function() {
+    backBtn.style.display = window.scrollY > 400 ? 'block' : 'none';
+  });
+  backBtn.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // ══════════ RANDOM GLITCH EFFECT ══════════
+  function randomGlitch() {
+    var allConvs = document.querySelectorAll('.conversation');
+    if (allConvs.length === 0) return;
+    var target = allConvs[Math.floor(Math.random() * allConvs.length)];
+    if (target.style.display === 'none') return;
+    target.classList.add('glitch-active');
+    setTimeout(function() {
+      target.classList.remove('glitch-active');
+    }, 150);
+    setTimeout(randomGlitch, 4000 + Math.random() * 8000);
+  }
+  setTimeout(randomGlitch, 5000);
+
+  // ══════════ RANDOM FLICKER ON HEADER ══════════
+  function randomFlicker() {
+    var header = document.getElementById('ascii-header');
+    header.classList.add('flicker');
+    setTimeout(function() {
+      header.classList.remove('flicker');
+    }, 80);
+    setTimeout(randomFlicker, 8000 + Math.random() * 15000);
+  }
+  setTimeout(randomFlicker, 10000);
+
+  // ══════════ HOVER STATIC ON CONVERSATIONS ══════════
+  document.querySelectorAll('.conv-header-row').forEach(function(row) {
+    row.addEventListener('mouseenter', function() {
+      row.parentElement.style.textShadow = '1px 0 rgba(255,0,0,0.08), -1px 0 rgba(0,0,255,0.08)';
+    });
+    row.addEventListener('mouseleave', function() {
+      row.parentElement.style.textShadow = '';
+    });
+  });
+
+})();
+</script>
+</body>
+</html>
