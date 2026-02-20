@@ -627,23 +627,203 @@ html, body {
 }
 
 @media (max-width: 640px) {
+  html, body {
+    font-size: 12px;
+  }
+
   #ascii-header {
-    font-size: 5.5px;
+    font-size: 4px;
     line-height: 1.1;
+    overflow-x: hidden;
+    padding: 0 4px;
   }
-  #search-input {
-    width: 180px;
+
+  #subtitle {
+    font-size: 11px;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
   }
+
   #container {
-    padding: 12px 8px 30px;
+    padding: 10px 6px 30px;
   }
+
   #stats-panel {
     flex-direction: column;
     align-items: center;
     gap: 3px;
+    padding: 8px 10px;
+    font-size: 10px;
   }
+
+  #action-buttons {
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  #action-buttons .action-btn {
+    font-size: 11px;
+    padding: 7px 14px;
+    width: 90%;
+    justify-content: center;
+  }
+
+  #search-box {
+    font-size: 11px;
+    white-space: normal;
+    overflow-x: hidden;
+  }
+
+  #search-inner {
+    width: 100%;
+    display: block;
+  }
+
+  #search-inner > div {
+    display: none;
+  }
+
+  #search-inner > div:nth-child(3) {
+    display: flex;
+  }
+
+  #search-row {
+    width: 100%;
+    padding: 0;
+  }
+
+  #search-input {
+    width: 100%;
+    flex: 1;
+    font-size: 13px;
+    padding: 6px 8px;
+  }
+
+  #search-btn {
+    font-size: 12px;
+    padding: 6px 10px;
+    white-space: nowrap;
+  }
+
   #keyboard-hints {
     display: none;
+  }
+
+  .conv-header-row {
+    padding: 10px 12px;
+  }
+
+  .conv-header {
+    font-size: 11px;
+    word-break: break-word;
+  }
+
+  .conv-badge {
+    font-size: 7px;
+    padding: 1px 4px;
+    margin-left: 6px;
+  }
+
+  .conv-toggle {
+    font-size: 11px;
+    min-width: 24px;
+    text-align: right;
+  }
+
+  .conv-content {
+    padding: 0 12px 12px;
+  }
+
+  .conv-meta {
+    font-size: 10px;
+  }
+
+  .conv-body {
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .entity-a::before,
+  .entity-b::before {
+    font-size: 10px;
+  }
+
+  .ascii-art {
+    font-size: 7px;
+    line-height: 1.15;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .separator {
+    font-size: 10px;
+  }
+
+  #expand-controls button {
+    font-size: 10px;
+    padding: 4px 10px;
+  }
+
+  #load-more-btn {
+    font-size: 12px;
+    padding: 10px 24px;
+    width: 90%;
+  }
+
+  #boot-text {
+    font-size: 10px;
+    padding: 12px;
+    max-width: 100%;
+    overflow-x: hidden;
+    word-break: break-all;
+  }
+
+  #footer {
+    font-size: 10px;
+  }
+
+  #footer .footer-border {
+    font-size: 8px;
+    overflow: hidden;
+  }
+
+  #back-to-top {
+    font-size: 10px;
+    padding: 5px 8px;
+    bottom: 12px;
+    right: 12px;
+  }
+
+  #no-results {
+    font-size: 11px;
+    padding: 24px 0;
+  }
+
+  #no-results p {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 380px) {
+  #ascii-header {
+    font-size: 3px;
+  }
+
+  .conv-header {
+    font-size: 10px;
+  }
+
+  .conv-badge {
+    display: none;
+  }
+
+  #action-buttons .action-btn {
+    font-size: 10px;
+    padding: 6px 10px;
+  }
+
+  .ascii-art {
+    font-size: 6px;
   }
 }
 </style>
